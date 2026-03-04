@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MailCompose/MailCompose.csproj" />
+  <Project Path="Example/Example.csproj" />
+  <Project Path="Tests/Tests.csproj" />
+  <Project Path="Editor/Editor.csproj" />
+</Solution>

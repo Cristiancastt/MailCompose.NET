@@ -1,0 +1,21 @@
+var email = Email.Compose(ctx =>
+{
+    ctx.Column(spacing: 16, () =>
+    {
+        ctx.Heading("Dark Mode 🌙", level: 2)
+            .TextColor(TailwindColors.White);
+
+        ctx.Text("This email uses the dark theme of MailCompose.")
+            .TextColor(TailwindColors.Gray300);
+
+        ctx.Divider(TailwindColors.Gray600);
+
+        ctx.Text("Perfect for late-night notifications.")
+            .TextColor(TailwindColors.Gray400);
+
+        ctx.Button("Learn More", "https://example.com")
+            .Background(TailwindColors.Indigo500);
+    });
+}).WithTheme(EmailTheme.Dark);
+
+var html = email.Render();

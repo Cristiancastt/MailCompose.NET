@@ -1,0 +1,138 @@
+var orderItems = new[]
+{
+    (Name: "MacBook Pro 14\"", Sku: "MBP-14-M3", Qty: 1, Price: 1999.00m, Img: "https://via.placeholder.com/80x80/e5e7eb/374151?text=MBP"),
+    (Name: "Magic Mouse", Sku: "MM-2023", Qty: 1, Price: 99.00m, Img: "https://via.placeholder.com/80x80/e5e7eb/374151?text=MM"),
+    (Name: "USB-C Hub 7-in-1", Sku: "HUB-7C", Qty: 2, Price: 45.00m, Img: "https://via.placeholder.com/80x80/e5e7eb/374151?text=HUB"),
+};
+
+var email = Email.Compose(ctx =>
+{
+    ctx.Column(spacing: 0, () =>
+    {
+        // Header
+        ctx.Container(() =>
+        {
+            ctx.Heading("Order Shipped 📦", level: 1)
+                .TextColor(TailwindColors.White).Center();
+            ctx.Text("Your order #ORD-2026-4872 is on its way")
+                .TextColor(TailwindColors.Emerald100).Center().TextSm();
+        }).Bg(TailwindColors.Emerald700).P(32).RoundedT(8);
+
+        ctx.Spacer(24);
+
+        // Tracking
+        ctx.Container(() =>
+        {
+            ctx.Column(spacing: 12, () =>
+            {
+                ctx.Text("Shipment Tracking").Bold().TextLg().TextColor(TailwindColors.Gray800);
+                ctx.Row(spacing: 0, () =>
+                {
+                    ctx.Container(() =>
+                    {
+                        ctx.Text("✅").FontSize(20).Center();
+                        ctx.Text("Confirmed").TextXs().Center().TextColor(TailwindColors.Green600).Bold();
+                    }).P(8);
+                    ctx.Container(() =>
+                    {
+                        ctx.Text("✅").FontSize(20).Center();
+                        ctx.Text("Packed").TextXs().Center().TextColor(TailwindColors.Green600).Bold();
+                    }).P(8);
+                    ctx.Container(() =>
+                    {
+                        ctx.Text("📦").FontSize(20).Center();
+                        ctx.Text("Shipped").TextXs().Center().TextColor(TailwindColors.Blue600).Bold();
+                    }).P(8);
+                    ctx.Container(() =>
+                    {
+                        ctx.Text("🏠").FontSize(20).Center();
+                        ctx.Text("Delivered").TextXs().Center().TextColor(TailwindColors.Gray400);
+                    }).P(8);
+                });
+            });
+        }).Bg(TailwindColors.Gray50).P(20).RoundedLg().Border(1, TailwindColors.Gray200);
+
+        ctx.Spacer(20);
+
+        // Products
+        ctx.Text("Items in your order").Bold().TextColor(TailwindColors.Gray800);
+        ctx.Spacer(12);
+
+        ctx.ForEach(orderItems, item =>
+        {
+            ctx.Container(() =>
+            {
+                ctx.Row(spacing: 16, () =>
+                {
+                    ctx.Image(item.Img, item.Name, width: 80, height: 80).RoundedMd();
+                    ctx.Column(spacing: 4, () =>
+                    {
+                        ctx.Text(item.Name).Bold().TextColor(TailwindColors.Gray900);
+                        ctx.Text($"SKU: {item.Sku}").TextXs().TextColor(TailwindColors.Gray400);
+                        ctx.Text($"Qty: {item.Qty}").TextSm().TextColor(TailwindColors.Gray500);
+                    });
+                    ctx.Text($"${item.Price * item.Qty:F2}")
+                        .Bold().TextColor(TailwindColors.Gray900).Align(TextAlign.Right);
+                });
+            }).Py(12).BorderB(1, TailwindColors.Gray100);
+        });
+
+        ctx.Spacer(16);
+
+        // Cost breakdown
+        ctx.Container(() =>
+        {
+            ctx.Column(spacing: 8, () =>
+            {
+                var subtotal = orderItems.Sum(i => i.Price * i.Qty);
+                ctx.Row(spacing: 8, () =>
+                {
+                    ctx.Text("Subtotal").TextColor(TailwindColors.Gray600);
+                    ctx.Text($"${subtotal:F2}").Align(TextAlign.Right).TextColor(TailwindColors.Gray600);
+                });
+                ctx.Row(spacing: 8, () =>
+                {
+                    ctx.Text("Shipping").TextColor(TailwindColors.Gray600);
+                    ctx.Text("Free").Align(TextAlign.Right).TextColor(TailwindColors.Green600).Bold();
+                });
+                ctx.Divider(TailwindColors.Gray200, thickness: 2);
+                ctx.Row(spacing: 8, () =>
+                {
+                    ctx.Text("Total").Bold().TextLg().TextColor(TailwindColors.Gray900);
+                    ctx.Text($"${subtotal:F2}").Bold().TextLg()
+                        .Align(TextAlign.Right).TextColor(TailwindColors.Emerald700);
+                });
+            });
+        }).Bg(TailwindColors.Gray50).P(20).RoundedLg();
+
+        ctx.Spacer(20);
+
+        // Shipping address
+        ctx.Container(() =>
+        {
+            ctx.Column(spacing: 4, () =>
+            {
+                ctx.Text("SHIPPING ADDRESS").Bold().TextSm().Uppercase()
+                    .TrackingWide().TextColor(TailwindColors.Gray500);
+                ctx.Spacer(4);
+                ctx.Text("John Smith").TextColor(TailwindColors.Gray800);
+                ctx.Text("123 Main Street, Apt 4B").TextColor(TailwindColors.Gray600).TextSm();
+                ctx.Text("New York, NY 10001").TextColor(TailwindColors.Gray600).TextSm();
+            });
+        }).P(16).BorderL(4, TailwindColors.Emerald500);
+
+        ctx.Spacer(24);
+
+        ctx.Button("Track Shipment", "https://example.com/track/TRK-2026-ABC")
+            .Bg(TailwindColors.Emerald600).RoundedLg();
+    });
+});
+
+email.WithTheme(t =>
+{
+    t.Title = "Your order has been shipped";
+    t.ContentPadding = 24;
+    t.FooterText = "Example Store · New York, USA · Unsubscribe";
+});
+
+var html = email.Render();

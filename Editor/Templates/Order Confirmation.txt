@@ -1,0 +1,58 @@
+var products = new[]
+{
+    ("Black T-Shirt", 2, 29.99m),
+    ("Running Shoes", 1, 89.50m),
+    ("Sports Cap", 3, 15.00m)
+};
+
+var email = Email.Compose(ctx =>
+{
+    ctx.Column(spacing: 16, () =>
+    {
+        ctx.Heading("Order Confirmed!", level: 1)
+            .TextColor(TailwindColors.Green700);
+
+        ctx.Text("Thank you for your purchase. Here is your summary:")
+            .TextColor(TailwindColors.Gray600);
+
+        ctx.Divider(TailwindColors.Green200);
+
+        ctx.ForEach(products, product =>
+        {
+            ctx.Row(spacing: 8, () =>
+            {
+                ctx.Text($"{product.Item2}x {product.Item1}")
+                    .Bold();
+                ctx.Text($"${product.Item2 * product.Item3:F2}")
+                    .Align(TextAlign.Right)
+                    .TextColor(TailwindColors.Gray600);
+            });
+        });
+
+        ctx.Divider(TailwindColors.Green200);
+
+        var total = products.Sum(p => p.Item2 * p.Item3);
+        ctx.Row(spacing: 8, () =>
+        {
+            ctx.Text("Total").Bold().FontSize(18);
+            ctx.Text($"${total:F2}")
+                .Bold()
+                .FontSize(18)
+                .Align(TextAlign.Right)
+                .TextColor(TailwindColors.Green700);
+        });
+
+        ctx.Spacer(8);
+
+        ctx.Button("View Order", "https://example.com/order/12345")
+            .Background(TailwindColors.Green600);
+    });
+});
+
+email.WithTheme(t =>
+{
+    t.Title = "Order Confirmed";
+    t.FooterText = "Example Store — Your trusted shop";
+});
+
+var html = email.Render();

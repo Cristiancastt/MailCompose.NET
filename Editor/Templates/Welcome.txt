@@ -1,0 +1,56 @@
+var email = Email.Compose(ctx =>
+{
+    ctx.Column(spacing: 20, () =>
+    {
+        ctx.Image("https://via.placeholder.com/600x200/2563eb/ffffff?text=Welcome",
+                   "Welcome Banner", width: 600)
+            .Rounded(8);
+
+        ctx.Heading("Welcome to Example!", level: 1)
+            .TextColor(TailwindColors.Blue700)
+            .Center();
+
+        ctx.Text("We're thrilled to have you here. Here are some steps to get started:")
+            .TextColor(TailwindColors.Gray600)
+            .Center();
+
+        ctx.Spacer(8);
+
+        ctx.Row(spacing: 16, () =>
+        {
+            ctx.Column(spacing: 8, 16, () =>
+            {
+                ctx.Text("📋").FontSize(28).Center();
+                ctx.Text("Complete Profile").Bold().Center();
+                ctx.Text("Add your photo and bio").FontSize(13).TextColor(TailwindColors.Gray500).Center();
+            });
+
+            ctx.Column(spacing: 8, 16, () =>
+            {
+                ctx.Text("👥").FontSize(28).Center();
+                ctx.Text("Connect").Bold().Center();
+                ctx.Text("Find friends and colleagues").FontSize(13).TextColor(TailwindColors.Gray500).Center();
+            });
+
+            ctx.Column(spacing: 8, 16, () =>
+            {
+                ctx.Text("🚀").FontSize(28).Center();
+                ctx.Text("Explore").Bold().Center();
+                ctx.Text("Discover what you can do").FontSize(13).TextColor(TailwindColors.Gray500).Center();
+            });
+        });
+
+        ctx.Spacer(8);
+
+        ctx.Button("Go to Dashboard", "https://example.com/dashboard")
+            .Background(TailwindColors.Blue600);
+    });
+});
+
+email.WithTheme(t =>
+{
+    t.Title = "Welcome to Example";
+    t.FooterText = "© 2026 Example. All rights reserved.";
+});
+
+var html = email.Render();

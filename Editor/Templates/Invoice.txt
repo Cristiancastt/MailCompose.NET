@@ -1,0 +1,174 @@
+var email = Email.Compose(ctx =>
+{
+    ctx.Column(spacing: 0, () =>
+    {
+        // Header
+        ctx.Row(spacing: 0, () =>
+        {
+            ctx.Column(spacing: 4, () =>
+            {
+                ctx.Text("ACME Corp").Bold().Text2Xl().TextColor(TailwindColors.Gray900);
+                ctx.Text("Technology Solutions").TextSm().TextColor(TailwindColors.Gray500);
+            });
+            ctx.Column(spacing: 4, () =>
+            {
+                ctx.Text("INVOICE").Bold().Text3Xl().TextColor(TailwindColors.Blue600)
+                    .Align(TextAlign.Right);
+                ctx.Text("#INV-2026-0342").TextSm().TextColor(TailwindColors.Gray500)
+                    .Align(TextAlign.Right);
+            });
+        });
+
+        ctx.Spacer(24);
+
+        // Client + date
+        ctx.Row(spacing: 24, () =>
+        {
+            ctx.Container(() =>
+            {
+                ctx.Column(spacing: 4, () =>
+                {
+                    ctx.Text("BILL TO").TextXs().Uppercase().TrackingWidest()
+                        .Bold().TextColor(TailwindColors.Gray400);
+                    ctx.Spacer(4);
+                    ctx.Text("Company XYZ Ltd.").Bold().TextColor(TailwindColors.Gray800);
+                    ctx.Text("Tax ID: 12345678").TextSm().TextColor(TailwindColors.Gray600);
+                    ctx.Text("45 Tech Avenue").TextSm().TextColor(TailwindColors.Gray600);
+                    ctx.Text("New York, NY 10001").TextSm().TextColor(TailwindColors.Gray600);
+                });
+            });
+            ctx.Container(() =>
+            {
+                ctx.Column(spacing: 6, () =>
+                {
+                    ctx.Row(spacing: 8, () =>
+                    {
+                        ctx.Text("Date:").TextSm().Bold().TextColor(TailwindColors.Gray500);
+                        ctx.Text("03/04/2026").TextSm().TextColor(TailwindColors.Gray700).Align(TextAlign.Right);
+                    });
+                    ctx.Row(spacing: 8, () =>
+                    {
+                        ctx.Text("Due:").TextSm().Bold().TextColor(TailwindColors.Gray500);
+                        ctx.Text("04/04/2026").TextSm().TextColor(TailwindColors.Gray700).Align(TextAlign.Right);
+                    });
+                    ctx.Row(spacing: 8, () =>
+                    {
+                        ctx.Text("Status:").TextSm().Bold().TextColor(TailwindColors.Gray500);
+                        ctx.Container(() =>
+                        {
+                            ctx.Text("Pending").TextXs().Bold().TextColor(TailwindColors.Amber700);
+                        }).Bg(TailwindColors.Amber100).Px(8).Py(2).RoundedFull();
+                    });
+                });
+            });
+        });
+
+        ctx.Spacer(24);
+
+        // Services table
+        ctx.Container(() =>
+        {
+            ctx.Container(() =>
+            {
+                ctx.Row(spacing: 0, () =>
+                {
+                    ctx.Text("Description").Bold().TextXs().Uppercase().TrackingWide()
+                        .TextColor(TailwindColors.White).W("45%");
+                    ctx.Text("Hours").Bold().TextXs().Uppercase().TrackingWide()
+                        .TextColor(TailwindColors.White).Center().W("15%");
+                    ctx.Text("Rate").Bold().TextXs().Uppercase().TrackingWide()
+                        .TextColor(TailwindColors.White).Align(TextAlign.Right).W("20%");
+                    ctx.Text("Amount").Bold().TextXs().Uppercase().TrackingWide()
+                        .TextColor(TailwindColors.White).Align(TextAlign.Right).W("20%");
+                });
+            }).Bg(TailwindColors.Gray800).Px(16).Py(10).RoundedT(8);
+
+            var services = new[]
+            {
+                (Desc: "Frontend web development", Hours: 40, Rate: 85.00m),
+                (Desc: "API backend development", Hours: 32, Rate: 95.00m),
+                (Desc: "UI/UX Design", Hours: 16, Rate: 75.00m),
+                (Desc: "QA & Testing", Hours: 12, Rate: 65.00m),
+            };
+
+            ctx.ForEach(services, svc =>
+            {
+                ctx.Container(() =>
+                {
+                    ctx.Row(spacing: 0, () =>
+                    {
+                        ctx.Text(svc.Desc).TextSm().TextColor(TailwindColors.Gray800).W("45%");
+                        ctx.Text(svc.Hours.ToString()).TextSm().TextColor(TailwindColors.Gray600).Center().W("15%");
+                        ctx.Text($"${svc.Rate:F2}/h").TextSm().TextColor(TailwindColors.Gray600)
+                            .Align(TextAlign.Right).W("20%");
+                        ctx.Text($"${svc.Hours * svc.Rate:F2}").TextSm().Bold()
+                            .TextColor(TailwindColors.Gray800).Align(TextAlign.Right).W("20%");
+                    });
+                }).Px(16).Py(10).BorderB(1, TailwindColors.Gray100);
+            });
+
+            // Totals
+            var subtotal = services.Sum(s => s.Hours * s.Rate);
+            var tax = subtotal * 0.10m;
+            ctx.Container(() =>
+            {
+                ctx.Column(spacing: 6, () =>
+                {
+                    ctx.Row(spacing: 0, () =>
+                    {
+                        ctx.Text("Subtotal").TextSm().TextColor(TailwindColors.Gray600).W("70%")
+                            .Align(TextAlign.Right);
+                        ctx.Text($"${subtotal:F2}").TextSm().TextColor(TailwindColors.Gray800)
+                            .Align(TextAlign.Right).W("30%");
+                    });
+                    ctx.Row(spacing: 0, () =>
+                    {
+                        ctx.Text("Tax (10%)").TextSm().TextColor(TailwindColors.Gray600).W("70%")
+                            .Align(TextAlign.Right);
+                        ctx.Text($"${tax:F2}").TextSm().TextColor(TailwindColors.Gray800)
+                            .Align(TextAlign.Right).W("30%");
+                    });
+                    ctx.Divider(TailwindColors.Gray200, thickness: 2);
+                    ctx.Row(spacing: 0, () =>
+                    {
+                        ctx.Text("TOTAL").Bold().TextLg().TextColor(TailwindColors.Gray900).W("70%")
+                            .Align(TextAlign.Right);
+                        ctx.Text($"${subtotal + tax:F2}").Bold().TextLg()
+                            .TextColor(TailwindColors.Blue600).Align(TextAlign.Right).W("30%");
+                    });
+                });
+            }).Px(16).Py(16).Bg(TailwindColors.Gray50).RoundedB(8);
+        }).RoundedLg().Border(1, TailwindColors.Gray200).OverflowHidden();
+
+        ctx.Spacer(24);
+
+        // Payment info
+        ctx.Container(() =>
+        {
+            ctx.Column(spacing: 8, () =>
+            {
+                ctx.Text("Payment Details").Bold().TextSm().TextColor(TailwindColors.Gray700);
+                ctx.Text("IBAN: US12 3456 7890 1234 5678 9012").FontMono().TextSm().TextColor(TailwindColors.Gray600);
+                ctx.Text("Reference: INV-2026-0342").FontMono().TextSm().TextColor(TailwindColors.Gray600);
+            });
+        }).P(16).Bg(TailwindColors.Blue50).RoundedLg().BorderL(4, TailwindColors.Blue400);
+
+        ctx.Spacer(20);
+
+        ctx.Button("Pay Now", "https://example.com/pay/INV-2026-0342")
+            .Bg(TailwindColors.Blue600).RoundedLg();
+
+        ctx.Spacer(8);
+        ctx.Text("Payment is due within 30 days of the invoice date.")
+            .TextXs().TextColor(TailwindColors.Gray400).Center().Italic();
+    });
+});
+
+email.WithTheme(t =>
+{
+    t.Title = "Invoice #INV-2026-0342";
+    t.ContentPadding = 32;
+    t.FooterText = "ACME Corp · 7 Innovation Street, New York";
+});
+
+var html = email.Render();

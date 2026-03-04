@@ -1,0 +1,114 @@
+var email = Email.Compose(ctx =>
+{
+    ctx.Column(spacing: 0, () =>
+    {
+        // Avatar + greeting
+        ctx.Row(spacing: 16, () =>
+        {
+            ctx.Image("https://via.placeholder.com/56x56/6366f1/ffffff?text=JP", "Avatar", width: 56, height: 56)
+                .RoundedFull();
+            ctx.Column(spacing: 2, () =>
+            {
+                ctx.Text("Hey, John! 👋").Bold().TextXl().TextColor(TailwindColors.Gray900);
+                ctx.Text("Here's your activity summary for this week")
+                    .TextSm().TextColor(TailwindColors.Gray500);
+            });
+        });
+
+        ctx.Spacer(24);
+
+        // Stats cards
+        ctx.Row(spacing: 12, () =>
+        {
+            ctx.Container(() =>
+            {
+                ctx.Text("📝").FontSize(24).Center();
+                ctx.Text("12").Bold().Text2Xl().Center().TextColor(TailwindColors.Blue700);
+                ctx.Text("Tasks done").TextXs().Center().TextColor(TailwindColors.Blue600);
+            }).Bg(TailwindColors.Blue50).P(16).RoundedXl().Border(1, TailwindColors.Blue200);
+
+            ctx.Container(() =>
+            {
+                ctx.Text("💬").FontSize(24).Center();
+                ctx.Text("28").Bold().Text2Xl().Center().TextColor(TailwindColors.Purple700);
+                ctx.Text("Messages sent").TextXs().Center().TextColor(TailwindColors.Purple600);
+            }).Bg(TailwindColors.Purple50).P(16).RoundedXl().Border(1, TailwindColors.Purple200);
+
+            ctx.Container(() =>
+            {
+                ctx.Text("⏱️").FontSize(24).Center();
+                ctx.Text("34h").Bold().Text2Xl().Center().TextColor(TailwindColors.Teal700);
+                ctx.Text("Time tracked").TextXs().Center().TextColor(TailwindColors.Teal600);
+            }).Bg(TailwindColors.Teal50).P(16).RoundedXl().Border(1, TailwindColors.Teal200);
+        });
+
+        ctx.Spacer(24);
+
+        // Activity timeline
+        ctx.Text("Recent Activity").Bold().TextLg().TextColor(TailwindColors.Gray900);
+        ctx.Spacer(12);
+
+        var activities = new[]
+        {
+            (Time: "Today, 10:30 AM", Action: "Completed task \"Redesign pricing page\"",
+             Icon: "✅", Color: TailwindColors.Green100, TextC: TailwindColors.Green700),
+            (Time: "Yesterday, 3:15 PM", Action: "Commented on project \"Mobile App v2\"",
+             Icon: "💬", Color: TailwindColors.Blue100, TextC: TailwindColors.Blue700),
+            (Time: "Yesterday, 11:00 AM", Action: "Uploaded 3 files to repository",
+             Icon: "📎", Color: TailwindColors.Orange100, TextC: TailwindColors.Orange700),
+            (Time: "Mon, 9:45 AM", Action: "Created sprint \"Sprint 14 — Q1 Final\"",
+             Icon: "🚀", Color: TailwindColors.Purple100, TextC: TailwindColors.Purple700),
+        };
+
+        ctx.ForEach(activities, act =>
+        {
+            ctx.Container(() =>
+            {
+                ctx.Row(spacing: 12, () =>
+                {
+                    ctx.Container(() =>
+                    {
+                        ctx.Text(act.Icon).FontSize(16).Center();
+                    }).Bg(act.Color).Size(36).RoundedFull().P(6);
+
+                    ctx.Column(spacing: 2, () =>
+                    {
+                        ctx.Text(act.Action).TextSm().TextColor(TailwindColors.Gray800);
+                        ctx.Text(act.Time).TextXs().TextColor(TailwindColors.Gray400);
+                    });
+                });
+            }).Py(8).BorderB(1, TailwindColors.Gray100);
+        });
+
+        ctx.Spacer(24);
+
+        // Streak badge
+        ctx.Container(() =>
+        {
+            ctx.Row(spacing: 16, () =>
+            {
+                ctx.Text("🔥").FontSize(36);
+                ctx.Column(spacing: 4, () =>
+                {
+                    ctx.Text("14-day streak!").Bold().TextLg().TextColor(TailwindColors.Orange700);
+                    ctx.Text("You've completed tasks for 14 consecutive days. Keep it up!")
+                        .TextSm().TextColor(TailwindColors.Orange600);
+                });
+            });
+        }).Bg(TailwindColors.Orange50).P(20).RoundedXl().Border(1, TailwindColors.Orange200);
+
+        ctx.Spacer(20);
+
+        ctx.Button("Open Workspace", "https://example.com/workspace")
+            .Bg(TailwindColors.Indigo600).RoundedLg();
+    });
+});
+
+email.WithTheme(t =>
+{
+    t.Title = "Your Weekly Activity — ProjectHub";
+    t.ContentPadding = 28;
+    t.FooterText = "ProjectHub · Notification settings · Help";
+});
+
+var html = email.Render();

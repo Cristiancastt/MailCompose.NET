@@ -1,0 +1,24 @@
+var email = Email.Compose(ctx =>
+{
+    ctx.Column(spacing: 12, () =>
+    {
+        ctx.Text("🔔 New activity on your account")
+            .Bold()
+            .FontSize(18);
+
+        ctx.Text("John Smith commented on your post.")
+            .TextColor(TailwindColors.Gray600);
+
+        ctx.Container(() =>
+        {
+            ctx.Text("\"Excellent article, very well explained. Thanks for sharing!\"")
+                .Italic()
+                .TextColor(TailwindColors.Gray500);
+        }).Background(TailwindColors.Gray50).Padding(16).Rounded(8);
+
+        ctx.Button("View Comment", "https://example.com/post/42#comment")
+            .Background(TailwindColors.Indigo600);
+    });
+});
+
+var html = email.Render();

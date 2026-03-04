@@ -1,0 +1,4 @@
+using MailCompose;
+using MailCompose.Nodes;
+using System.Linq;
+

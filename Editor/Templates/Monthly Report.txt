@@ -1,0 +1,54 @@
+var email = Email.Compose(ctx =>
+{
+    ctx.Column(spacing: 16, () =>
+    {
+        ctx.Heading("Monthly Report 📊", level: 2)
+            .TextColor(TailwindColors.Gray900);
+
+        ctx.Text("Here's your activity summary for February 2026:")
+            .TextColor(TailwindColors.Gray600);
+
+        ctx.Divider(TailwindColors.Gray200);
+
+        // Stats row
+        ctx.Row(spacing: 12, () =>
+        {
+            // Stat 1
+            ctx.Container(() =>
+            {
+                ctx.Text("1,234").Bold().FontSize(24).Center().TextColor(TailwindColors.Blue600);
+                ctx.Text("Page Views").FontSize(12).Center().TextColor(TailwindColors.Gray500);
+            }).Background(TailwindColors.Blue50).Padding(16).Rounded(8);
+
+            // Stat 2
+            ctx.Container(() =>
+            {
+                ctx.Text("89%").Bold().FontSize(24).Center().TextColor(TailwindColors.Green600);
+                ctx.Text("Uptime").FontSize(12).Center().TextColor(TailwindColors.Gray500);
+            }).Background(TailwindColors.Green50).Padding(16).Rounded(8);
+
+            // Stat 3
+            ctx.Container(() =>
+            {
+                ctx.Text("42").Bold().FontSize(24).Center().TextColor(TailwindColors.Purple600);
+                ctx.Text("New Users").FontSize(12).Center().TextColor(TailwindColors.Gray500);
+            }).Background(TailwindColors.Purple50).Padding(16).Rounded(8);
+        });
+
+        ctx.Spacer(8);
+
+        ctx.Text("Keep up the great work! Your metrics are trending upward. 📈")
+            .TextColor(TailwindColors.Gray600);
+
+        ctx.Button("View Full Report", "https://example.com/report")
+            .Background(TailwindColors.Indigo600);
+    });
+});
+
+email.WithTheme(t =>
+{
+    t.Title = "Monthly Report";
+    t.FooterText = "You're receiving this because you enabled monthly reports.";
+});
+
+var html = email.Render();

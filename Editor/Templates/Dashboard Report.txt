@@ -1,0 +1,123 @@
+var email = Email.Compose(ctx =>
+{
+    ctx.Column(spacing: 0, () =>
+    {
+        // Header
+        ctx.Container(() =>
+        {
+            ctx.Text("📊 Weekly Report").Bold().Text2Xl().TextColor(TailwindColors.White).Center();
+            ctx.Text("March 1 — 7, 2026").TextSm().TextColor(TailwindColors.Sky200).Center();
+        }).Bg(TailwindColors.Sky700).P(28).RoundedT(8);
+
+        ctx.Spacer(24);
+
+        // KPIs
+        ctx.Row(spacing: 12, () =>
+        {
+            var kpis = new[]
+            {
+                (Label: "Revenue", Value: "$12,450", Change: "+14.2%", Up: true, Color: TailwindColors.Green600, Bg: TailwindColors.Green50),
+                (Label: "Users", Value: "3,287", Change: "+8.5%", Up: true, Color: TailwindColors.Blue600, Bg: TailwindColors.Blue50),
+                (Label: "Conversion", Value: "4.2%", Change: "-0.8%", Up: false, Color: TailwindColors.Red600, Bg: TailwindColors.Red50),
+                (Label: "Retention", Value: "92%", Change: "+2.1%", Up: true, Color: TailwindColors.Purple600, Bg: TailwindColors.Purple50),
+            };
+
+            ctx.ForEach(kpis, kpi =>
+            {
+                ctx.Container(() =>
+                {
+                    ctx.Column(spacing: 4, () =>
+                    {
+                        ctx.Text(kpi.Label).TextXs().Uppercase().TrackingWide()
+                            .TextColor(TailwindColors.Gray500).Center();
+                        ctx.Text(kpi.Value).Bold().TextXl().TextColor(TailwindColors.Gray900).Center();
+                        ctx.Text($"{(kpi.Up ? "↑" : "↓")} {kpi.Change}")
+                            .TextXs().Bold().TextColor(kpi.Color).Center();
+                    });
+                }).Bg(kpi.Bg).P(16).RoundedLg();
+            });
+        });
+
+        ctx.Spacer(24);
+
+        // Top products
+        ctx.Text("Top Products").Bold().TextLg().TextColor(TailwindColors.Gray900);
+        ctx.Spacer(8);
+
+        ctx.Container(() =>
+        {
+            ctx.Container(() =>
+            {
+                ctx.Row(spacing: 0, () =>
+                {
+                    ctx.Text("Product").Bold().TextXs().Uppercase().TrackingWide()
+                        .TextColor(TailwindColors.Gray500).W("40%");
+                    ctx.Text("Sales").Bold().TextXs().Uppercase().TrackingWide()
+                        .TextColor(TailwindColors.Gray500).Center().W("20%");
+                    ctx.Text("Revenue").Bold().TextXs().Uppercase().TrackingWide()
+                        .TextColor(TailwindColors.Gray500).Align(TextAlign.Right).W("20%");
+                    ctx.Text("Trend").Bold().TextXs().Uppercase().TrackingWide()
+                        .TextColor(TailwindColors.Gray500).Align(TextAlign.Right).W("20%");
+                });
+            }).Bg(TailwindColors.Gray50).Px(16).Py(10);
+
+            var topProducts = new[]
+            {
+                (Name: "Premium Plan", Sales: 156, Revenue: "$7,800", Trend: "+23%", TrendUp: true),
+                (Name: "Starter Plan", Sales: 89, Revenue: "$2,670", Trend: "+12%", TrendUp: true),
+                (Name: "API Credits", Sales: 234, Revenue: "$1,170", Trend: "+45%", TrendUp: true),
+                (Name: "Extra Storage", Sales: 45, Revenue: "$675", Trend: "-5%", TrendUp: false),
+                (Name: "Support+", Sales: 12, Revenue: "$420", Trend: "+8%", TrendUp: true),
+            };
+
+            ctx.ForEach(topProducts, p =>
+            {
+                ctx.Container(() =>
+                {
+                    ctx.Row(spacing: 0, () =>
+                    {
+                        ctx.Text(p.Name).TextSm().TextColor(TailwindColors.Gray800).W("40%");
+                        ctx.Text(p.Sales.ToString()).TextSm().TextColor(TailwindColors.Gray600).Center().W("20%");
+                        ctx.Text(p.Revenue).TextSm().Bold().TextColor(TailwindColors.Gray800)
+                            .Align(TextAlign.Right).W("20%");
+                        ctx.Text($"{(p.TrendUp ? "↑" : "↓")} {p.Trend}")
+                            .TextXs().Bold()
+                            .TextColor(p.TrendUp ? TailwindColors.Green600 : TailwindColors.Red500)
+                            .Align(TextAlign.Right).W("20%");
+                    });
+                }).Px(16).Py(10).BorderB(1, TailwindColors.Gray100);
+            });
+        }).RoundedLg().Border(1, TailwindColors.Gray200).OverflowHidden();
+
+        ctx.Spacer(24);
+
+        // Insights
+        ctx.Container(() =>
+        {
+            ctx.Column(spacing: 12, () =>
+            {
+                ctx.Text("💡 Weekly Insights").Bold().TextColor(TailwindColors.Amber800);
+                ctx.Text("• Revenue is up 14.2% from last week")
+                    .TextSm().TextColor(TailwindColors.Amber700);
+                ctx.Text("• API Credits is the fastest growing product (+45%)")
+                    .TextSm().TextColor(TailwindColors.Amber700);
+                ctx.Text("• Conversion dipped slightly — review landing page")
+                    .TextSm().TextColor(TailwindColors.Amber700);
+            });
+        }).Bg(TailwindColors.Amber50).P(20).RoundedLg().BorderL(4, TailwindColors.Amber400);
+
+        ctx.Spacer(20);
+
+        ctx.Button("View Full Dashboard", "https://example.com/dashboard")
+            .Bg(TailwindColors.Sky600).RoundedLg();
+    });
+});
+
+email.WithTheme(t =>
+{
+    t.Title = "Weekly Report — March 2026";
+    t.ContentPadding = 24;
+    t.FooterText = "Analytics · Auto-generated every Monday at 9:00 AM";
+});
+
+var html = email.Render();

@@ -1,0 +1,86 @@
+var email = Email.Compose(ctx =>
+{
+    ctx.Column(spacing: 0, () =>
+    {
+        // Alert banner
+        ctx.Container(() =>
+        {
+            ctx.Row(spacing: 12, () =>
+            {
+                ctx.Text("⚠️").FontSize(28);
+                ctx.Column(spacing: 4, () =>
+                {
+                    ctx.Text("Security Alert").Bold().TextXl().TextColor(TailwindColors.White);
+                    ctx.Text("New sign-in detected").TextSm().TextColor(TailwindColors.Red200);
+                });
+            });
+        }).Bg(TailwindColors.Red600).P(24).RoundedT(8);
+
+        ctx.Spacer(24);
+
+        ctx.Text("We detected a sign-in to your account from a new device or location.")
+            .TextColor(TailwindColors.Gray700).LeadingRelaxed();
+
+        ctx.Spacer(16);
+
+        // Sign-in details
+        ctx.Container(() =>
+        {
+            ctx.Column(spacing: 10, () =>
+            {
+                ctx.Text("ACCESS DETAILS").Bold().TextSm().Uppercase().TrackingWide()
+                    .TextColor(TailwindColors.Gray500);
+                ctx.Spacer(4);
+                ctx.Row(spacing: 0, () =>
+                {
+                    ctx.Text("📅 Date:").Bold().TextSm().TextColor(TailwindColors.Gray600).W("35%");
+                    ctx.Text("March 4, 2026 at 2:23 PM UTC").TextSm().TextColor(TailwindColors.Gray800);
+                });
+                ctx.Divider(TailwindColors.Gray100);
+                ctx.Row(spacing: 0, () =>
+                {
+                    ctx.Text("💻 Device:").Bold().TextSm().TextColor(TailwindColors.Gray600).W("35%");
+                    ctx.Text("Chrome 122 on Windows 11").TextSm().TextColor(TailwindColors.Gray800);
+                });
+                ctx.Divider(TailwindColors.Gray100);
+                ctx.Row(spacing: 0, () =>
+                {
+                    ctx.Text("📍 Location:").Bold().TextSm().TextColor(TailwindColors.Gray600).W("35%");
+                    ctx.Text("New York, USA (IP: 85.123.x.x)").TextSm().TextColor(TailwindColors.Gray800);
+                });
+            });
+        }).P(20).Bg(TailwindColors.Gray50).RoundedLg().Border(1, TailwindColors.Gray200);
+
+        ctx.Spacer(20);
+
+        ctx.Row(spacing: 12, () =>
+        {
+            ctx.Button("That was me ✓", "https://example.com/security/confirm")
+                .Bg(TailwindColors.Green600).RoundedLg();
+            ctx.Button("Not me ✗", "https://example.com/security/block")
+                .Bg(TailwindColors.Red600).RoundedLg();
+        });
+
+        ctx.Spacer(20);
+
+        ctx.Container(() =>
+        {
+            ctx.Column(spacing: 8, () =>
+            {
+                ctx.Text("🛡️ Security Recommendations").Bold().TextSm().TextColor(TailwindColors.Gray700);
+                ctx.Text("• Enable two-factor authentication (2FA)").TextSm().TextColor(TailwindColors.Gray600);
+                ctx.Text("• Use a unique password with at least 12 characters").TextSm().TextColor(TailwindColors.Gray600);
+                ctx.Text("• Review your active sessions regularly").TextSm().TextColor(TailwindColors.Gray600);
+            });
+        }).P(16).Bg(TailwindColors.Blue50).RoundedLg().BorderL(4, TailwindColors.Blue400);
+    });
+});
+
+email.WithTheme(t =>
+{
+    t.Title = "Security Alert — New Sign-in";
+    t.ContentPadding = 28;
+    t.FooterText = "This is an automated security message. Do not reply.";
+});
+
+var html = email.Render();

@@ -1,0 +1,109 @@
+var articles = new[]
+{
+    (Title: "Building Modern REST APIs in .NET 10", Category: "Tutorial", ReadTime: "8 min",
+     Excerpt: "Learn to create robust APIs with minimal APIs, source generators and AOT compilation.",
+     Img: "https://via.placeholder.com/520x150/3b82f6/ffffff?text=API+REST", Color: TailwindColors.Blue600),
+    (Title: "The Future of Blazor: Server + WASM Unified", Category: "Analysis", ReadTime: "12 min",
+     Excerpt: "Blazor United changes the game. We analyze what it means for your projects.",
+     Img: "https://via.placeholder.com/250x140/8b5cf6/ffffff?text=Blazor", Color: TailwindColors.Violet600),
+    (Title: "5 Design Patterns Every C# Dev Should Know", Category: "Guide", ReadTime: "6 min",
+     Excerpt: "From Mediator to Result Pattern, these patterns will elevate your code quality.",
+     Img: "https://via.placeholder.com/250x140/059669/ffffff?text=Patterns", Color: TailwindColors.Emerald600),
+};
+
+var email = Email.Compose(ctx =>
+{
+    ctx.Column(spacing: 0, () =>
+    {
+        // Header branding
+        ctx.Container(() =>
+        {
+            ctx.Row(spacing: 12, () =>
+            {
+                ctx.Text("⚡").FontSize(32);
+                ctx.Column(spacing: 2, () =>
+                {
+                    ctx.Text("DevWeekly").Bold().Text2Xl().TextColor(TailwindColors.White).LeadingTight();
+                    ctx.Text("Your weekly dose of .NET").TextSm().TextColor(TailwindColors.Indigo200);
+                });
+            });
+        }).Bg(TailwindColors.Indigo700).P(24).RoundedT(8);
+
+        ctx.Spacer(24);
+
+        ctx.Text("Edition #47 — March 2026").TextSm().TextColor(TailwindColors.Gray400).Uppercase().TrackingWidest();
+        ctx.Spacer(16);
+
+        // Featured article
+        ctx.Container(() =>
+        {
+            ctx.Column(spacing: 16, () =>
+            {
+                ctx.Image(articles[0].Img, articles[0].Title, width: 520).RoundedLg();
+                ctx.Container(() =>
+                {
+                    ctx.Text(articles[0].Category).Uppercase().TextXs().Bold()
+                        .TrackingWidest().TextColor(TailwindColors.White);
+                }).Bg(articles[0].Color).Px(10).Py(4).RoundedFull();
+                ctx.Text(articles[0].Title).Bold().TextXl().TextColor(TailwindColors.Gray900).LeadingTight();
+                ctx.Text(articles[0].Excerpt).TextColor(TailwindColors.Gray600).LeadingRelaxed();
+                ctx.Row(spacing: 12, () =>
+                {
+                    ctx.Link("https://example.com/blog/1", "Read article →")
+                        .TextColor(articles[0].Color).Bold();
+                    ctx.Text($"· {articles[0].ReadTime}").TextSm().TextColor(TailwindColors.Gray400);
+                });
+            });
+        }).P(20).Bg(TailwindColors.Gray50).RoundedLg().ShadowSm();
+
+        ctx.Spacer(24);
+
+        // Article grid
+        ctx.Row(spacing: 16, () =>
+        {
+            ctx.ForEach(articles.Skip(1), article =>
+            {
+                ctx.Container(() =>
+                {
+                    ctx.Column(spacing: 12, () =>
+                    {
+                        ctx.Image(article.Img, article.Title, width: 250).RoundedMd();
+                        ctx.Container(() =>
+                        {
+                            ctx.Text(article.Category).Uppercase().TextXs().Bold()
+                                .TrackingWidest().TextColor(TailwindColors.White);
+                        }).Bg(article.Color).Px(8).Py(3).RoundedFull();
+                        ctx.Text(article.Title).Bold().TextBase().TextColor(TailwindColors.Gray900).LeadingSnug();
+                        ctx.Text(article.Excerpt).TextSm().TextColor(TailwindColors.Gray500).LeadingRelaxed();
+                        ctx.Link("https://example.com/blog", "Read more →")
+                            .TextColor(article.Color).Bold().TextSm();
+                    });
+                }).P(16).Bg(TailwindColors.White).RoundedLg().Border(1, TailwindColors.Gray200);
+            });
+        });
+
+        ctx.Spacer(24);
+
+        // Share CTA
+        ctx.Container(() =>
+        {
+            ctx.Column(spacing: 12, () =>
+            {
+                ctx.Text("Enjoying DevWeekly?").Bold().TextLg().Center().TextColor(TailwindColors.Indigo900);
+                ctx.Text("Share with a colleague and both get access to exclusive content.")
+                    .TextSm().Center().TextColor(TailwindColors.Indigo700);
+                ctx.Button("Share DevWeekly", "https://example.com/share")
+                    .Bg(TailwindColors.Indigo600).RoundedFull();
+            });
+        }).Bg(TailwindColors.Indigo50).P(24).RoundedLg().Border(1, TailwindColors.Indigo200);
+    });
+});
+
+email.WithTheme(t =>
+{
+    t.Title = "DevWeekly #47 — Your weekly .NET dose";
+    t.ContentPadding = 24;
+    t.FooterText = "DevWeekly · Unsubscribe · View in browser";
+});
+
+var html = email.Render();

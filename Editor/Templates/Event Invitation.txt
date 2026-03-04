@@ -1,0 +1,66 @@
+var email = Email.Compose(ctx =>
+{
+    ctx.Column(spacing: 16, () =>
+    {
+        ctx.Heading("🎉 You're invited!", level: 1)
+            .TextColor(TailwindColors.Purple700)
+            .Center();
+
+        ctx.Text("Join us for our annual product launch event!")
+            .TextColor(TailwindColors.Gray600)
+            .Center()
+            .FontSize(18);
+
+        ctx.Spacer(8);
+
+        ctx.Container(() =>
+        {
+            ctx.Column(spacing: 8, () =>
+            {
+                ctx.Text("📅 Date: March 15, 2026")
+                    .Bold()
+                    .TextColor(TailwindColors.Gray700);
+
+                ctx.Text("🕐 Time: 7:00 PM — 10:00 PM")
+                    .Bold()
+                    .TextColor(TailwindColors.Gray700);
+
+                ctx.Text("📍 Location: Convention Center, Hall A")
+                    .Bold()
+                    .TextColor(TailwindColors.Gray700);
+            });
+        }).Background(TailwindColors.Purple50)
+          .Padding(20)
+          .Rounded(12)
+          .Border(1, TailwindColors.Purple200);
+
+        ctx.Spacer(8);
+
+        ctx.Text("Dress code: Smart casual")
+            .TextColor(TailwindColors.Gray500)
+            .Center()
+            .Italic();
+
+        ctx.Row(spacing: 12, () =>
+        {
+            ctx.Button("Accept", "https://example.com/rsvp?yes")
+                .Background(TailwindColors.Green600);
+
+            ctx.Button("Decline", "https://example.com/rsvp?no")
+                .Background(TailwindColors.Gray400);
+        });
+
+        ctx.Text("Please RSVP by March 10, 2026")
+            .FontSize(12)
+            .TextColor(TailwindColors.Gray400)
+            .Center();
+    });
+});
+
+email.WithTheme(t =>
+{
+    t.Title = "Event Invitation";
+    t.FooterText = "© 2026 Example Inc.";
+});
+
+var html = email.Render();

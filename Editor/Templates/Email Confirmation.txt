@@ -1,0 +1,30 @@
+var email = Email.Compose(ctx =>
+{
+    ctx.Column(spacing: 16, () =>
+    {
+        ctx.Heading("Confirm your email", level: 2)
+            .TextColor(TailwindColors.Gray900);
+
+        ctx.Text("Please confirm your email address by clicking the button below.")
+            .TextColor(TailwindColors.Gray600);
+
+        ctx.Text("We may need to send you critical information about our service and it is important that we have an accurate email address.")
+            .TextColor(TailwindColors.Gray600);
+
+        ctx.Button("Confirm Email Address", "https://example.com/confirm")
+            .Background(TailwindColors.Blue600);
+
+        ctx.Text("— [Insert company name here]")
+            .TextColor(TailwindColors.Gray400)
+            .FontSize(14)
+            .Italic();
+    });
+});
+
+email.WithTheme(t =>
+{
+    t.Title = "Email Confirmation";
+    t.FooterText = "If you did not request this, please ignore this message.";
+});
+
+var html = email.Render();
