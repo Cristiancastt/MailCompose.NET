@@ -42,6 +42,11 @@ The project includes a **live email editor** i you want to create email with the
 
 ![Editor example](Images/EditorExample.png)
 
+## Real Example 
+
+
+![Real example](Images/RealTest.png)
+
 ## Installation
 
 ```bash
